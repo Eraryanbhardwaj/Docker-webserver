@@ -1,48 +1,41 @@
 version: '2'
 services:
-  data:
-    image: webserver:data-latest
-    volumes_from:
-      - container:example.com
-  
- 
- mariadb:
-    image: nwebserver:mariadb-latest
+  mariadb:
+    image: mariadb-latest
     restart: always
-    volumes_from:
-      - data
+    volumes:/var/lib/mysql
+      - 
   
   nginx:
-    image: webserver:nginx-latest
+    image: nginx-latest
     links:
       - php
 #    ports:
 #      - {ip where to bind}:{port on previous ip where to bind}:80
     restart: always
-    volumes_from:
-      - data
+    volumes:/usr/share/nginx/html
+      
   
   php:
-    image: webserver:php-latest
+    image: php-latest
     links:
       - mariadb:mysql
     restart: always
-    volumes_from:
-      - data
-  
+    volumes:/var/www/html
+    
 #  phpmyadmin:
-#    image: webserver:phpmyadmin-latest
+#    image: phpmyadmin-latest
 #    links:
 #      - mariadb:mysql
 #    restart: always
 #    ports:
 #      - {ip where to bind}:{port on previous ip where to bind}:80
   
-  ssh:
-    image: webserver:ssh-v1
-    restart: always
-    volumes_from:
-      - data
+  #ssh:
+   #image: ssh-latest
+   #restart: always
+   #volumes:
+      
 #    ports:
 #      - {ip where to bind}:{port on previous ip where to bind}:22
 #    environment:
